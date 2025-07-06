@@ -11,22 +11,35 @@ Este projeto é uma API REST desenvolvida em Java com Spring Boot, focada na an�
 ## 🚀 Como Rodar o Projeto
 
 1. **Pré-requisitos**:
-   - Java 17 ou superior (recomendado Java 24) ☕
-   - PostgreSQL em execução (recomendo fazer o download do [PgAdmin4](https://www.pgadmin.org/download/) ou utilizar uma conexão com o [Supabase](https://supabase.com/)) 🐘
-   - Chave da API da [MARITACA AI](https://www.maritaca.ai/) 🦜
-   - IntelliJ IDEA (recomendado) 
-
-2. **Configuração**:
+   - Faça o download do [Docker Desktop](https://www.docker.com/get-started)
+     - IMPORTANTE: se você utiliza Windows faça a instalação do WSL2: [Tutorial oficial da Microsoft](https://learn.microsoft.com/pt-br/windows/wsl/install)
+     - ATENÇÃO: Recomendo fazer a instalação do **Docker Desktop** porque ele já vem com o **Docker Compose** instalado, que será necessário para rodar o projeto 
+   - Gerar uma chave da API da [Maritaca AI](https://www.maritaca.ai/)
+       
+2. **Configuração e Execução Passo a Passo**:
    - Clone o repositório.
-   - Crie um arquivo chamado `.env` na raiz do projeto com as variáveis de ambiente, siga a estrutura do arquivo [`example.env`](example.env).
-   - Certifique-se de que as variáveis fora configuradas corretamente
-   - Crie as tabelas no banco de dados disponíveis em [`00001_create_initial_state_database.sql`](db/migrations/00001_create_initial_state_database.sql) 
+      ```sh
+      git clone https://github.com/cristiantebaldi/classificacao-de-comentarios-api.git
+      ```
+   - Mova-se até o diretório do projeto.
+      ```sh
+      cd classificacao-de-comentarios-api
+      ```
+   - Dentro da raiz do projeto crie um arquivo chamado `.env`
 
-3. **Execução**:
-   - Abra o projeto no IntelliJ IDEA.
-   - Aguarde o carregamento das dependências Maven.
-   - Execute a classe [`br.com.cesurgmarau.classificacao_comentarios.ClassificacaoComentariosApplication`](src/main/java/br/com/cesurgmarau/classificacao_comentarios/TrabalhoFinalApplication.java) como uma aplicação Spring Boot.
-   - A API estará disponível em `http://localhost:8080`.
+   - No arquivo `.env` siga a mesma estrutura do arquivo [`example.env`](example.env)
+      ```sh
+      MARITACA_API_KEY=chave-gerada
+      ```
+   - No terminal rode o seguinte comando
+      ```sh
+      docker-compose up
+      ```
+     - **IMPORTANTE!!!**
+       - Certifique-se que você esteja na raiz do projeto 
+       - Certifique-se que o Docker Desktop esteja aberto ou rodando em segundo plano
+   - Aguarde os containers serem construídos e a aplicação iniciar
+   - E PRONTO!!! - A API estará rodando em: `http://localhost:8080` 🚀
 
 ---
 
@@ -34,7 +47,62 @@ Este projeto é uma API REST desenvolvida em Java com Spring Boot, focada na an�
 
 💡**Dica:** Utilize um Cliente HTTP (Insomnia, Postman, Bruno...) para executar as rotas da API, com essas ferramentas você pode criar uma request através de um comando `cURL`.
 
-### Usuários
+
+### 🧑‍💻 Exemplo Prático: Avaliando um Comentário com a IA
+Para avaliar um comentário, siga estes passos:
+
+1. **Crie um usuário:**
+   ```sh
+   curl -X POST http://localhost:8080/account \
+     -H "Content-Type: application/json" \
+     -d '{"username":"user1","name":"Usuário 1"}'
+   ```
+   > Guarde o `id` retornado (exemplo: `1`).
+
+2. **Crie um produto:**
+   ```sh
+   curl -X POST http://localhost:8080/product \
+     -H "Content-Type: application/json" \
+     -d '{"name":"Produto X","price":100,"description":"Descrição"}'
+   ```
+   > Guarde o `id` retornado (exemplo: `1`).
+
+3. **Envie um comentário para avaliação:**
+   ```sh
+   curl -X POST http://localhost:8080/review \
+     -H "Content-Type: application/json" \
+     -d '{"accountID":1,"productID":1,"comment":"Ótimo produto, recomendo!"}'
+   ```
+4. **Liste todas as avaliações do sistema**
+    ```sh
+    curl http://localhost:8080/review
+    ```
+   A resposta trará o resultado da análise feita pela IA, incluindo sentimento e score.
+
+   **Exemplo de Retorno**
+   ```sh
+    [
+      {
+        "id": 1,
+        "accountID": 1,
+        "productID": 1,
+        "classificationID": 5,
+        "scoreID": 41,
+        "comment": "Este produto é muito ruim",
+        "product": "Bola de Futebol",
+        "classification": "MUITO RUIM",
+        "score": "40",
+        "accountName": "usuário"
+      }
+    ]
+   ```
+
+---
+
+
+### 🛣️Todos os Endpoints da API
+
+#### Usuários
 
 - **Criar usuário**
   ```sh
@@ -57,7 +125,7 @@ Este projeto é uma API REST desenvolvida em Java com Spring Boot, focada na an�
   curl -X DELETE http://localhost:8080/account/1
   ```
 
-### Produtos
+#### Produtos
 
 - **Criar produto**
   ```sh
@@ -80,7 +148,7 @@ Este projeto é uma API REST desenvolvida em Java com Spring Boot, focada na an�
   curl -X DELETE http://localhost:8080/product/1
   ```
 
-### Comentários
+#### Comentários
 
 - **Enviar comentário (com análise automática)**
   ```sh
@@ -93,7 +161,7 @@ Este projeto é uma API REST desenvolvida em Java com Spring Boot, focada na an�
 - **Listar todos os comentários**
   ```sh
   curl http://localhost:8080/review
-  ```http://localhost:8080/review?productID=1
+  ```
 - **Filtrar por produto**
   ```sh
   curl http://localhost:8080/review?productID=1
@@ -107,7 +175,7 @@ Este projeto é uma API REST desenvolvida em Java com Spring Boot, focada na an�
   curl http://localhost:8080/review?classification=RUIM
   ```
 
-### Relatórios
+#### Relatórios
 
 - **Total de comentários por sentimento**
   ```sh
@@ -130,7 +198,7 @@ Este projeto é uma API REST desenvolvida em Java com Spring Boot, focada na an�
 
 - **Single Responsibility Principle (SRP):** Cada classe tem uma responsabilidade única, separando controllers, use cases e repositórios.
 - **Open/Closed Principle (OCP):**  As interfaces permitem extensão de funcionalidades sem modificar implementações existentes.
-- **Liskov Substitution Principle (LSP):** Não foi em sua essência esse princípio.
+- **Liskov Substitution Principle (LSP):** Não foi utilizado em sua essência esse princípio.
 - **Interface Segregation Principle (ISP):** Interfaces específicas para cada contexto (ex: `ProductRepository`, `ReviewRepository`).
 - **Dependency Inversion Principle (DIP):** Uso de injeção de dependências do Spring para desacoplar as camadas.
 
@@ -138,3 +206,36 @@ Este projeto é uma API REST desenvolvida em Java com Spring Boot, focada na an�
 
 ## 💡 Desafios e Aprendizados
 Tive vários desafios nesse projeto; acredito que os principais foram a questão da conexão com a IA, organização do projeto - principalmente em relação as rotas de relatórios - e aplicação dos princípios SOLID. Mas, em resumo aprendi muitas coisas durante o desenvolvimento do projeto como: melhores formas de se estruturar um projeto e como utilizar um serviço de terceiro em uma aplicação Spring Boot.
+
+---
+
+## 🗂️ Como acessar o pgAdmin
+Caso você tenha o interesse de saber como funciona o relacionamento entre as tabelas você pode acessar o PgAdmin. Veja o tutorial abaixo!  
+➡️ [Como acessar o pgAdmin](docs/pgadmin-acesso.md)
+
+---
+
+## 🚧 Melhorias Planejadas para Próximas Atualizações
+
+- Implementar tratamento de erros mais robusto em todos os endpoints.
+- Criar DTOs específicos para cada entidade, melhorando a clareza e segurança dos dados trafegados.
+- Adicionar documentação interativa da API utilizando Swagger.
+
+---
+
+## 📬 Contato com o Desenvolvedor
+
+Em caso de dúvidas, sugestões ou para relatar problemas, entre em contato:
+
+- **Nome:** Cristian Tebaldi
+- **E-mail:** cristiantebaldi@gmail.com
+- **GitHub:** [cristiantebaldi](https://github.com/cristiantebaldi)
+
+---
+
+## 📝 Licença
+
+Este projeto está licenciado sob a Licença MIT.  
+Consulte o arquivo [`LICENSE`](LICENSE) para mais detalhes.
+
+---
