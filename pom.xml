@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.cesurgmarau</groupId>
-	<artifactId>trabalho-final</artifactId>
+	<artifactId>classificacao-comentarios</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>trabalho-final</name>
+	<name>classificacao-comentarios</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -73,7 +73,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>br.com.cesurgmarau.trabalho_final.TrabalhoFinalApplication</mainClass>
+					<mainClass>br.com.cesurgmarau.classificacao_comentarios.ClassificacaoComentariosApplication</mainClass>
 				</configuration>
 				<executions>
 					<execution>

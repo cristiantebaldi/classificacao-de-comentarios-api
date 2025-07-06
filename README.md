@@ -25,7 +25,7 @@ Este projeto é uma API REST desenvolvida em Java com Spring Boot, focada na an�
 3. **Execução**:
    - Abra o projeto no IntelliJ IDEA.
    - Aguarde o carregamento das dependências Maven.
-   - Execute a classe [`br.com.cesurgmarau.trabalho_final.TrabalhoFinalApplication`](src/main/java/br/com/cesurgmarau/trabalho_final/TrabalhoFinalApplication.java) como uma aplicação Spring Boot.
+   - Execute a classe [`br.com.cesurgmarau.classificacao_comentarios.ClassificacaoComentariosApplication`](src/main/java/br/com/cesurgmarau/classificacao_comentarios/TrabalhoFinalApplication.java) como uma aplicação Spring Boot.
    - A API estará disponível em `http://localhost:8080`.
 
 ---
