@@ -59,7 +59,7 @@ Para avaliar um comentário, siga estes passos:
    ```
    > Guarde o `id` retornado (exemplo: `1`).
 
-2. **Crie um produto:**
+2. **Crie um produto (Valor do produto em Inteiro):** 
    ```sh
    curl -X POST http://localhost:8080/product \
      -H "Content-Type: application/json" \

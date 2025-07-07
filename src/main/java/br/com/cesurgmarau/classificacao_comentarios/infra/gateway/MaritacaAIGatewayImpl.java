@@ -50,7 +50,7 @@ public class MaritacaAIGatewayImpl implements MaritacaAIGateway {
 
             MaritacaAIResponse maritaAIResponse = mapper.readValue(response.body(), MaritacaAIResponse.class);
 
-            return maritaAIResponse.choices.get(0).message.content.strip();
+            return maritaAIResponse.choices.getFirst().message.content.strip();
         } catch (Exception e) {
             throw new RuntimeException("Error assessing comment: " + e.getMessage());
         }
@@ -88,7 +88,7 @@ public class MaritacaAIGatewayImpl implements MaritacaAIGateway {
             ObjectMapper mapper = new ObjectMapper();
 
             MaritacaAIResponse maritaAIResponse = mapper.readValue(response.body(), MaritacaAIResponse.class);
-            return maritaAIResponse.choices.get(0).message.content.strip();
+            return maritaAIResponse.choices.getFirst().message.content.strip();
         } catch (Exception e) {
             throw new RuntimeException("Error assessing comment: " + e.getMessage());
         }
